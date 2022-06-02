@@ -22,11 +22,12 @@ for hash in list_hashes:
 
     response_price = requests.get(
         "https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=EUR&limit=1&toTs=" + str(
-            timestamp + 86400) + "&api_key=b845ea0a472a48c64593408ed0566c50f311d98ec840d08204f6c62132ae611f")
+            timestamp) + "&api_key=b845ea0a472a48c64593408ed0566c50f311d98ec840d08204f6c62132ae611f")
     prices = json.loads(response_price.text)
     eth_eur = prices["Data"]["Data"][1]["low"]
+    txn_etherscan = '=HYPERLINK("{}", "{}")'.format("https://etherscan.io/tx/"+txn.hash.hex(), txn.hash.hex())    
 
-    row_to_append.append([txn.hash, datetime.fromtimestamp(timestamp), eth_eur, "", w3.fromWei(int(txn.value), 'ether')])
+    row_to_append.append([txn_etherscan, datetime.fromtimestamp(timestamp), eth_eur, "", w3.fromWei(int(txn.value), 'ether')])
 
 for row in row_to_append:
     page.append(row)
